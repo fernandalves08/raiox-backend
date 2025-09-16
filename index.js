@@ -86,6 +86,8 @@ app.get('/api/openapi', (req, res) => {
         }
       }
     };
+
+    
     res.json(schema);
   } catch (error) {
     res.status(500).json({ error: 'Erro ao gerar OpenAPI' });
@@ -94,3 +96,4 @@ app.get('/api/openapi', (req, res) => {
 app.listen(port, () => {
   console.log(`Servidor rodando na porta ${port}`);
 });
+
