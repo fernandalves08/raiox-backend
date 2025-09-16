@@ -35,53 +35,47 @@ app.post('/extract/triage', (req, res) => {
     preferencias: ["arroz", "feijão"]
   });
 });
-
 app.get('/api/openapi', (req, res) => {
-  res.json({
-    openapi: '3.0.0',
-    info: {
-      title: 'Raio-X Pré-Consulta',
-      version: '1.0.0'
-    },
-    paths: {
-      '/extract/triage': {
-        post: {
-          summary: 'Extrai dados nutricionais do texto bruto enviado',
-          requestBody: {
-            required: true,
-            content: {
-              'application/json': {
-                schema: {
-                  type: 'object',
-                  properties: {
-                    textoBruto: { type: 'string' }
-                  },
-                  required: ['textoBruto']
-                }
-              }
-            }
-          },
-          responses: {
-            '200': {
-              description: 'Dados extraídos com sucesso',
+  try {
+    const schema = {
+      openapi: '3.0.0',
+      info: {
+        title: 'Raio-X Pré-Consulta',
+        version: '1.0.0'
+      },
+      paths: {
+        '/extract/triage': {
+          post: {
+            summary: 'Extrai dados nutricionais do texto bruto enviado',
+            requestBody: {
+              required: true,
               content: {
                 'application/json': {
                   schema: {
                     type: 'object',
                     properties: {
-                      objetivo: { type: 'string' },
-                      dificuldades: {
-                        type: 'array',
-                        items: { type: 'string' }
-                      },
-                      rotina: { type: 'string' },
-                      sinaisSintomas: {
-                        type: 'array',
-                        items: { type: 'string' }
-                      },
-                      preferencias: {
-                        type: 'array',
-                        items: { type: 'string' }
+                      textoBruto: {
+                        type: 'string'
+                      }
+                    },
+                    required: ['textoBruto']
+                  }
+                }
+              }
+            },
+            responses: {
+              '200': {
+                description: 'Resposta com dados extraídos',
+                content: {
+                  'application/json': {
+                    schema: {
+                      type: 'object',
+                      properties: {
+                        objetivo: { type: 'string' },
+                        dificuldades: { type: 'array', items: { type: 'string' } },
+                        rotina: { type: 'string' },
+                        sinaisSintomas: { type: 'array', items: { type: 'string' } },
+                        preferencias: { type: 'array', items: { type: 'string' } }
                       }
                     }
                   }
@@ -91,20 +85,12 @@ app.get('/api/openapi', (req, res) => {
           }
         }
       }
-    }
-  });
+    };
+    res.json(schema);
+  } catch (error) {
+    res.status(500).json({ error: 'Erro ao gerar OpenAPI' });
+  }
 });
-app.post('/extract/triage', (req, res) => {
-  const texto = req.body.textoBruto || '';
-  res.json({
-    objetivo: "emagrecer",
-    dificuldades: ["beliscar à tarde"],
-    rotina: "acorda às 6h, treino às 7h",
-    sinaisSintomas: ["intestino preso"],
-    preferencias: ["arroz", "feijão"]
-  });
-});
-
 app.listen(port, () => {
   console.log(`Servidor rodando na porta ${port}`);
 });
