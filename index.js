@@ -13,7 +13,11 @@ app.get('/', (req, res) => {
   res.send('Raio-X Pré-Consulta backend rodando!');
 });
 
-app.post('/uploads', upload.fields([{ name: 'questionario' }, { name: 'avaliacao' }, { name: 'exames' }]), (req, res) => {
+app.post('/uploads', upload.fields([
+  { name: 'questionario' },
+  { name: 'avaliacao' },
+  { name: 'exames' }
+]), (req, res) => {
   res.json({
     questionarioId: "fake-questionario-id",
     avaliacaoId: "fake-avaliacao-id",
@@ -31,6 +35,7 @@ app.post('/extract/triage', (req, res) => {
     preferencias: ["arroz", "feijão"]
   });
 });
+
 app.get('/api/openapi', (req, res) => {
   try {
     const schema = {
@@ -95,22 +100,6 @@ app.get('/api/openapi', (req, res) => {
     console.error('Erro no /api/openapi:', err);
     res.status(500).send('Erro interno no servidor');
   }
-});
-
-app.listen(port, () => {
-  console.log(`Servidor rodando na porta ${port}`);
-});
-
-
-app.post('/extract/triage', (req, res) => {
-  const texto = req.body.textoBruto || '';
-  res.json({
-    objetivo: "emagrecer",
-    dificuldades: ["beliscar à tarde"],
-    rotina: "acorda às 6h, treino às 7h",
-    sinaisSintomas: ["intestino preso"],
-    preferencias: ["arroz", "feijão"]
-  });
 });
 
 app.listen(port, () => {
